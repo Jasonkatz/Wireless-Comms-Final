@@ -79,11 +79,22 @@ for n = 1:N
             numB = 0;
             denomB = 0;
             for l = 1:L
-                % WHAT THE FUCK
 %                 numA = numA + etaRo(l) * GM(0, R(k), sigSq(k) + etaSigma(l)) * R(k) * etaSigma(l) / (sigSq(k) + etaSigma(l));
 %                 denomA = denomA + etaRo(l) * GM(0, R(k), sigSq(k) + etaSigma(l));
 %                 numB = numB + etaRo(l) * GM(0, R(k), sigSq(k) + etaSigma(l)) * (etaSigma(l) * sigSq(k) * (sigSq(k) + etaSigma(l)) + abs(R(k))^2*etaSigma(l)^2) / (sigSq(k) + etaSigma(l));
 %                 denomB = denomB + etaRo(l) * GM(0, R(k), sigSq(k) + etaSigma(l));
+                if numA == 0
+                    numA = rand() * 1e-6;
+                end
+                if denomA == 0
+                    denomA = rand() * 1e-6;
+                end
+                if numB == 0
+                    numB = rand() * 1e-6;
+                end
+                if denomB == 0
+                    denomB = rand() * 1e-6;
+                end
                 numA = R(k) * etaSigma(l) / (sigSq(k) + etaSigma(l));
                 denomA = 1;
                 numB = (etaSigma(l) * sigSq(k) * (sigSq(k) + etaSigma(l)) + abs(R(k))^2*etaSigma(l)^2) / (sigSq(k) + etaSigma(l));
@@ -92,8 +103,6 @@ for n = 1:N
             anew = [anew ; numA / denomA];
             vnew = [vnew ; numB / denomB];
         end
-        anew(isnan(anew)) = 0;
-        vnew(isnan(vnew)) = 0;
         
         aold = a;
         V = Vnew;
@@ -115,6 +124,12 @@ for n = 1:N
                 zeta = etaSigma(l) * v(k) / (etaSigma(l) + v(k));
                 for lp = 1:L
                     denomFk = denomFk + etaRo(lp) * GM(0, a(k), etaSigma(lp) + v(k));
+                end
+                if numFk == 0
+                    numFk = rand() * 1e-6;
+                end
+                if denomFk == 0
+                    denomFk = rand() * 1e-6;
                 end
                 sumFk = sumFk + numFk / denomFk;
                 sumWhateva = sumWhateva + numFk / denomFk * (abs(gamma)^2 + zeta);
